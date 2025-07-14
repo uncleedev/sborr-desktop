@@ -1,6 +1,15 @@
+import { LayoutDashboard } from "lucide-react";
 
 export default function DashboardPage() {
   return (
-    <div>DashboardPage</div>
+    <div>
+      <button title="Dashboard">
+        <LayoutDashboard 
+          aria-label="Dashboard Icon"
+        />
+      </button>
+
+      DashboardPage
+    </div>
   )
 }

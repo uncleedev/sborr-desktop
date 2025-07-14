@@ -5,13 +5,13 @@ export default function CardProfile() {
   return (
     <DropdownMenu>
         <DropdownMenuTrigger>
-            <div className="flex items-center gap-4 border-l-2 border-gray-300 px-3">
+            <div className="flex items-center gap-4 border-l-2 border-gray-300 px-3 cursor-pointer">
                 <div className="w-[38px] h-[38px] bg-gray-200 rounded-full" />
                 <div>
                     <h3>Uncledev</h3>
                     <h4 className="text-[12px] text-foreground/50">Administrator</h4>
                 </div>
-            </div>
+            </div>  
         </DropdownMenuTrigger>
         <DropdownMenuContent>
             <DropdownMenuLabel

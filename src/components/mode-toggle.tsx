@@ -8,7 +8,7 @@ export default function ModeToggle() {
 
   return (
     <DropdownMenu>
-        <DropdownMenuTrigger className="p-2">
+        <DropdownMenuTrigger className="p-2 cursor-pointer hover:text-foreground/50" title="Toggle Theme">
             {theme === "dark" ? < Moon /> : theme === "light" ? <Sun /> : <Monitor />}
         </DropdownMenuTrigger>
         <DropdownMenuContent>

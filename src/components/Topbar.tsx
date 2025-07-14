@@ -14,9 +14,9 @@ export default function Topbar() {
         <h3 className="text-foreground/50">SBORR / <span className="text-foreground uppercase">{activePath}</span> </h3>
       <div className="flex items-center gap-4">
         <div className="flex gap-2">
-          <span className="p-2">
+          <button className="p-2 cursor-pointer hover:text-foreground/50" title="Notifications">
             <Bell />
-          </span>
+          </button>
           <ModeToggle />
         </div>
 
