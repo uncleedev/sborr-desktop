@@ -3,22 +3,22 @@ import { Calendar, FileText, LayoutDashboard, Users } from "lucide-react";
 export const navLinks = [
     {
         label: "Dashboard",
-        icon: <LayoutDashboard className="w-full h-full" />,
+        icon: <LayoutDashboard />,
         path: "/",
     },
     {
         label: "Documents",
-        icon: <FileText className="w-full h-full" />,
+        icon: <FileText />,
         path: "/documents",
     },
     {
         label: "Sessions",
-        icon: <Calendar className="w-full h-full" />,
+        icon: <Calendar />,
         path: "/sessions",
     },
     {
         label: "Users",
-        icon: <Users className="w-full h-full" />,
+        icon: <Users />,
         path: "/users",
     }
 ]

@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom";
 
 export default function HomeLayout() {
   return (
-    <div className="flex w-screen h-screen p-4 gap-4">
+    <div className="min-w-[960px] min-h-[640px] w-screen h-screen flex items-center gap-4 p-4">
       <Sidebar />
-      <div className="flex flex-col w-full h-full gap-4">
+      <div className="w-full h-full flex flex-col gap-4">
         <Topbar />
         <Outlet />
       </div>

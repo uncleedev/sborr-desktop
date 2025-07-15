@@ -33,6 +33,10 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.mjs'),
     },
     autoHideMenuBar: true,
+    width:1920,
+    height: 1080,
+    minHeight: 640,
+    minWidth: 960,
   })
 
   // Test active push message to Renderer-process.

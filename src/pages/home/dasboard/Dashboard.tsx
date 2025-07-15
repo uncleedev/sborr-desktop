@@ -1,7 +1,7 @@
-import CardCalendar from "@/components/card-calendar";
-import CardGraph from "@/components/card-graph";
-import CardReport from "@/components/card-report";
-import CardSession from "@/components/card-session";
+import CardCalendar from "@/components/cards/card-calendar";
+import CardGraph from "@/components/cards/card-graph";
+import CardReport from "@/components/cards/card-report";
+import CardSession from "@/components/cards/card-session";
 import { CardSessionData } from "@/types/data";
 import { Calendar, Clock, FileText, Users } from "lucide-react";
 
@@ -65,7 +65,7 @@ export default function DashboardPage() {
   ]
 
   return (
-  <div className="flex flex-col gap-4 w-full h-full">
+  <div className="w-full h-full flex flex-col gap-4 p-[1px] overflow-auto scrollbar-hide">
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {reportData.map((report, index) => (
         <CardReport 
@@ -83,14 +83,14 @@ export default function DashboardPage() {
       <CardCalendar />
     </div>
 
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 w-full h-full">
-      <div className="round px-[14px] py-4 lg:col-span-3">
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 w-full h-full p-[1px]">
+      <div className="flex flex-col gap-4 round px-[14px] py-4 lg:col-span-3">
         <div>
           <h2>Upcoming Session</h2>
           <p className="text-foreground/50">scheduled legislative session</p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           {sessionsData.map((data, index) => (
             <CardSession 
               data={data}
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           <p className="text-foreground/50">scheduled legislative session</p>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           {sessionsData.map((data, index) => (
             <CardSession 
               data={data}
