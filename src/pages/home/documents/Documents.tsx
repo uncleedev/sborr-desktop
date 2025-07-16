@@ -1,21 +1,15 @@
 import ButtonAction from "@/components/buttons/button-action";
 import Searchbar from "@/components/searchbar";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, } from "lucide-react";
+import DocumentAdd from "./DocumentAdd";
 
 export default function DocumentsPage() {
   return (
     <section className="w-full h-full flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2>Document Management</h2>
-        <Button className="cursor-pointer">
-          <Plus  />
-          <span className="font-semibold">
-            Add Document
-          </span>
-        </Button>
+        <DocumentAdd />
       </div>
 
       <div className="w-full h-full flex flex-col gap-4 px-[14px] py-4 round">
