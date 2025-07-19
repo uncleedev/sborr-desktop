@@ -1,11 +1,14 @@
 import { Calendar, MapPin, Users } from "lucide-react";
 import ButtonAction from "../buttons/button-action";
-import { CardSessionData } from "@/types/data";
+import { SessionType } from "@/types/data";
+import SessionView from "@/pages/home/sessions/SessionView";
+import SessionEdit from "@/pages/home/sessions/SessionEdit";
+import SessionDelete from "@/pages/home/sessions/SessionDelete";
 
 
 
 interface CardSessionProps {
-    data: CardSessionData
+    data: SessionType
     variant?: "full" | "icon"| "half";
 }
 
@@ -29,7 +32,7 @@ export default function CardSession({ data, variant }: CardSessionProps) {
                 <span className="text-[20px] text-foreground/50">
                     <MapPin />
                 </span>
-                <h4 className="text-foreground/50">{data.location}</h4>
+                <h4 className="text-foreground/50">{data.venue}</h4>
             </span>
 
             <span className="flex items-center gap-2">
@@ -44,7 +47,7 @@ export default function CardSession({ data, variant }: CardSessionProps) {
             <div>
                 <h4>Related Documents:</h4>
                 <div className="flex gap-2">
-                    {data.relatedDocs.map((item, index) => (
+                    {data.relatedDocuments.map((item, index) => (
                         <p key={index} className="flex items-center px-2 bg-foreground/10 rounded-full font-medium text-[14px]">{item}</p>
                     ))}
                 </div>
@@ -52,10 +55,10 @@ export default function CardSession({ data, variant }: CardSessionProps) {
         )}
 
         {variant != "half" && (
-            <div className="flex items-center gap-2">
-                <ButtonAction variant={"add"} hasLabel={variant}/> 
-                <ButtonAction variant={"edit"} hasLabel={variant}/>
-                <ButtonAction variant={"delete"} hasLabel={variant}/>
+            <div className="flex items-center justify-end gap-2">
+                <SessionView data={data} option="grid" />
+                <SessionEdit data={data} option="grid" />
+                <SessionDelete data={data} option="grid" />
             </div>
         )}
     </div>

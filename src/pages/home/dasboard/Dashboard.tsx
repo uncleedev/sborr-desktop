@@ -2,7 +2,7 @@ import CardCalendar from "@/components/cards/card-calendar";
 import CardGraph from "@/components/cards/card-graph";
 import CardReport from "@/components/cards/card-report";
 import CardSession from "@/components/cards/card-session";
-import { CardSessionData } from "@/types/data";
+import { sessions } from "@/lib/sample-data";
 import { Calendar, Clock, FileText, Users } from "lucide-react";
 
 export default function DashboardPage() {
@@ -34,38 +34,10 @@ export default function DashboardPage() {
     }
   ]
 
-  const sessionsData: CardSessionData[] = [
-    {
-      title: "Barangay Mascap Budget",
-      date: "2014-01-18",
-      time: "02:00pm",
-      location: "Chamber",
-      status: "completed",
-      attendees: "Mayor, Finance Committee, Councilors",
-      relatedDocs: ["Barangay Budget", "Road Rehab"] 
-    },
-    {
-      title: "Barangay Mascap Budget",
-      date: "2014-01-18",
-      time: "02:00pm",
-      location: "Chamber",
-      status: "ongoing",
-      attendees: "Mayor, Finance Committee, Councilors",
-      relatedDocs: ["Barangay Budget", "Road Rehab"] 
-    },
-    {
-      title: "Barangay Mascap Budget",
-      date: "2014-01-18",
-      time: "02:00pm",
-      location: "Chamber",
-      status: "scheduled",
-      attendees: "Mayor, Finance Committee, Councilors",
-      relatedDocs: ["Barangay Budget", "Road Rehab"] 
-    },
-  ]
-
   return (
   <div className="w-full h-full flex flex-col gap-4 p-[1px] overflow-auto scrollbar-hide">
+
+    {/* CARD REPORT */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {reportData.map((report, index) => (
         <CardReport 
@@ -78,11 +50,13 @@ export default function DashboardPage() {
       ))}
     </div>
 
+    {/* ACTIVITY & CALENDAR */}
     <div className="w-full grid grid-cols-1 lg:grid-cols-5 gap-4">
       <CardGraph />
       <CardCalendar />
     </div>
 
+    {/* LIST OF SESSION */}
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 w-full h-full p-[1px]">
       <div className="flex flex-col gap-4 round px-[14px] py-4 lg:col-span-3">
         <div>
@@ -91,7 +65,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-col gap-4">
-          {sessionsData.map((data, index) => (
+          {sessions.map((data, index) => (
             <CardSession 
               data={data}
               key={index}
@@ -108,7 +82,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-col gap-4">
-          {sessionsData.map((data, index) => (
+          {sessions.map((data, index) => (
             <CardSession 
               data={data}
               key={index}
