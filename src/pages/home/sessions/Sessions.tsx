@@ -1,56 +1,75 @@
-import { useState, useMemo, useEffect } from "react";
-import Searchbar from "@/components/searchbar";
-import SessionAdd from "./SessionAdd";
-import SessionEdit from "./SessionEdit";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState, useEffect } from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+  Calendar,
+} from "@/components/ui";
+
 import { LayoutGrid, Table as TableIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pagination, PaginationContent, PaginationItem, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
-import SessionView from "./SessionView";
+
+import Searchbar from "@/components/searchbar";
 import ButtonAction from "@/components/buttons/button-action";
 import CardSession from "@/components/cards/card-session";
-import SessionDelete from "./SessionDelete";
+import SelectFilter from "@/components/select-filter";
+import { SessionAdd, SessionEdit, SessionView, SessionDelete } from "./index";
+
 import { sessions } from "@/lib/sample-data";
 
-export default function SessionsPage() {
-  
+const STATUS_OPTIONS = ["all", "scheduled", "completed", "on-going"];
+const ROWS_PER_PAGE = 12;
 
+export default function SessionsPage() {
+  // STATE
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [date, setDate] = useState(new Date());
   const [toggle, setToggle] = useState("table");
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 12;
 
-  const filteredSessions = useMemo(() => {
-    return sessions.filter((session) => {
-      const matchesSearch =
-        session.title.toLowerCase().includes(search.toLowerCase()) ||
-        session.venue.toLowerCase().includes(search.toLowerCase());
-      const matchesStatus = selectedStatus === "all" || session.status.toLowerCase() === selectedStatus;
-      return matchesSearch && matchesStatus;
-    });
-  }, [sessions, search, selectedStatus]);
+  // FILTERED DATA TABLE
+  const filteredSessions = sessions.filter((session) => {
+    const matchesSearch =
+      session.title.toLowerCase().includes(search.toLowerCase()) ||
+      session.venue.toLowerCase().includes(search.toLowerCase());
 
-  const filteredCalendarSessions = useMemo(() => {
-    return sessions.filter((session) => {
-      const sessionDate = new Date(session.date);
-      return (
-        sessionDate.getFullYear() === date.getFullYear() &&
-        sessionDate.getMonth() === date.getMonth() &&
-        sessionDate.getDate() === date.getDate()
-      );
-    });
-  }, [sessions, date]);
+    const matchesStatus =
+      selectedStatus === "all" || session.status.toLowerCase() === selectedStatus;
 
+    return matchesSearch && matchesStatus;
+  });
 
-  const totalPages = Math.ceil(filteredSessions.length / rowsPerPage);
+  // FILTERED DATA GRID
+  const filteredCalendarSessions = sessions.filter((session) => {
+    const sessionDate = new Date(session.date);
+    return (
+      sessionDate.getFullYear() === date.getFullYear() &&
+      sessionDate.getMonth() === date.getMonth() &&
+      sessionDate.getDate() === date.getDate()
+    );
+  });
 
-  const paginatedSessions = useMemo(() => {
-    const start = (currentPage - 1) * rowsPerPage;
-    return filteredSessions.slice(start, start + rowsPerPage);
-  }, [filteredSessions, currentPage]);
+  // PAGINATION
+  const totalPages = Math.ceil(filteredSessions.length / ROWS_PER_PAGE);
+  const paginatedSessions = filteredSessions.slice(
+    (currentPage - 1) * ROWS_PER_PAGE,
+    currentPage * ROWS_PER_PAGE
+  );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -58,37 +77,30 @@ export default function SessionsPage() {
 
   return (
     <section className="w-full h-screen flex flex-col gap-4 overflow-hidden">
-      {/* Page header */}
       <div className="flex items-center justify-between">
         <h2>Session Management</h2>
         <SessionAdd />
       </div>
 
-      {/* Layout */}
       <div className="w-full flex-1 grid grid-cols-1 lg:grid-cols-5 gap-4 overflow-hidden p-[2px]">
-        {/* Left: Sessions */}
+        {/* LEFT PANEL */}
         <div className="w-full h-full flex flex-col lg:col-span-3 round px-[14px] py-4 gap-4 overflow-hidden">
-          {/* Controls */}
           <div className="flex items-center justify-between">
             <div>
               <h2>Scheduled Session</h2>
-              <p className="text-foreground/50">Upcoming and past legislative documents.</p>
+              <p className="text-foreground/50">Upcoming and past legislative sessions.</p>
             </div>
+
             <div className="flex items-center gap-2">
               <Searchbar value={search} onChange={(e) => setSearch(e.target.value)} />
-              <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="scheduled">Scheduled</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="on-going">On-Going</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+
+              <SelectFilter
+                label="Status"
+                value={selectedStatus}
+                onChange={setSelectedStatus}
+                options={STATUS_OPTIONS}
+              />
+
               <Select value={toggle} onValueChange={setToggle}>
                 <SelectTrigger>
                   <SelectValue />
@@ -107,7 +119,7 @@ export default function SessionsPage() {
             </div>
           </div>
 
-          {/* Table View */}
+          {/* TABLE VIEW */}
           {toggle === "table" && (
             <>
               <Table>
@@ -164,9 +176,9 @@ export default function SessionsPage() {
             </>
           )}
 
-          {/* Grid View */}
+          {/* GRID VIEW */}
           {toggle === "grid" && (
-            <div className="flex-1 overflow-auto grid gap-4 scrollbar-hide p-[2px]">
+            <div className="overflow-auto grid gap-4 scrollbar-hide p-[2px]">
               {filteredSessions.map((session, index) => (
                 <CardSession key={index} data={session} variant="full" />
               ))}
@@ -174,12 +186,13 @@ export default function SessionsPage() {
           )}
         </div>
 
-        {/* Right: Calendar */}
-        <div className="w-full h-full flex flex-col gap-4 lg:col-span-2 round px-[14px] py-4  overflow-hidden">
+        {/* RIGHT PANEL */}
+        <div className="w-full h-full flex flex-col gap-4 lg:col-span-2 round px-[14px] py-4 overflow-hidden">
           <div>
             <h2>Calendar View</h2>
-            <p className="text-foreground/50">Select a date to view session.</p>
+            <p className="text-foreground/50">Select a date to view sessions.</p>
           </div>
+
           <Calendar
             mode="single"
             required
@@ -189,7 +202,7 @@ export default function SessionsPage() {
             className="w-full rounded-md border shadow-sm"
           />
 
-          <div className="flex-1 overflow-auto grid  gap-4 scrollbar-hide p-[2px]">
+          <div className="flex-1 overflow-auto grid gap-4 scrollbar-hide p-[2px]">
             {filteredCalendarSessions.length > 0 ? (
               filteredCalendarSessions.map((session, index) => (
                 <CardSession key={index} data={session} variant="half" />
@@ -197,7 +210,6 @@ export default function SessionsPage() {
             ) : (
               <p className="text-muted-foreground text-sm">No sessions scheduled on this day.</p>
             )}
-
           </div>
         </div>
       </div>

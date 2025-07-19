@@ -1,14 +1,4 @@
-import { useState, useMemo } from "react";
-import ButtonAction from "@/components/buttons/button-action";
-import Searchbar from "@/components/searchbar";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,41 +6,43 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import DocumentAdd from "./DocumentAdd";
-import DocumentView from "./DocumentView";
-import DocumentEdit from "./DocumentEdit";
-import DocumentDelete from "./DocumentDelete";
+} from "@/components/ui";
+
+import ButtonAction from "@/components/buttons/button-action";
+import Searchbar from "@/components/searchbar";
+import { DocumentAdd, DocumentView, DocumentEdit, DocumentDelete } from "./index";
+import SelectFilter from "@/components/select-filter";
+
 import { documents } from "@/lib/sample-data";
+
+const STATUS_OPTIONS = ["all", "approved", "draft", "pending"];
+const CATEGORY_OPTIONS = ["all", "memorandum", "resolution", "ordinance"];
 
 export default function DocumentsPage() {
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const filteredDocuments = useMemo(() => {
-    return documents.filter((doc) => {
-      const matchesSearch =
-        doc.subject.toLowerCase().includes(search.toLowerCase()) ||
-        doc.author.toLowerCase().includes(search.toLowerCase());
+  // FILTER
+  const filteredDocuments = documents.filter((doc) => {
+    const matchesSearch =
+      doc.subject.toLowerCase().includes(search.toLowerCase()) ||
+      doc.author.toLowerCase().includes(search.toLowerCase());
 
-      const matchesStatus = selectedStatus === "all" || doc.status.toLowerCase() === selectedStatus;
+    const matchesStatus = selectedStatus === "all" || doc.status.toLowerCase() === selectedStatus;
+    const matchesCategory = selectedCategory === "all" || doc.category.toLowerCase() === selectedCategory;
 
-      const matchesCategory = selectedCategory === "all" || doc.category.toLowerCase() === selectedCategory;
-
-      return matchesSearch && matchesStatus && matchesCategory;
-    });
-  }, [documents, search, selectedStatus, selectedCategory]);
+    return matchesSearch && matchesStatus && matchesCategory;
+  });
 
   return (
     <section className="w-full h-full flex flex-col gap-4">
-      {/* HEADER */}
       <div className="flex items-center justify-between">
         <h2>Document Management</h2>
         <DocumentAdd />
       </div>
 
-      <div className="w-full h-full flex flex-col gap-4 px-[14px] py-4 round">
+      <div className="w-full h-full flex flex-col gap-4 round px-[14px] py-4">
         <div className="w-full flex items-center justify-between">
           <div>
             <h2>Documents</h2>
@@ -59,43 +51,21 @@ export default function DocumentsPage() {
 
           {/* FILTERS */}
           <div className="grid lg:grid-cols-4 gap-3">
-            {/* SEARCHBAR */}
             <Searchbar onChange={(e) => setSearch(e.target.value)} />
 
-            {/* STATUS */}
-            <div className="col-span-1">
-              <Select value={selectedStatus || "all"} onValueChange={setSelectedStatus}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="approved">Approved</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            <SelectFilter
+              label="Status"
+              value={selectedStatus}
+              options={STATUS_OPTIONS}
+              onChange={setSelectedStatus}
+            />
 
-            {/* CATEGORY */}
-            <div className="col-span-1">
-              <Select value={selectedCategory || "all"} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="all">All Category</SelectItem>
-                    <SelectItem value="memorandum">Memorandum</SelectItem>
-                    <SelectItem value="resolution">Resolution</SelectItem>
-                    <SelectItem value="ordinance">Ordinance</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-            </div>
+            <SelectFilter
+              label="Category"
+              value={selectedCategory}
+              options={CATEGORY_OPTIONS}
+              onChange={setSelectedCategory}
+            />
           </div>
         </div>
 
@@ -112,8 +82,9 @@ export default function DocumentsPage() {
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
-            {filteredDocuments.length > 0 ? (
+            {filteredDocuments.length ? (
               filteredDocuments.map((document, index) => (
                 <TableRow key={index}>
                   <TableCell>{document.subject}</TableCell>
